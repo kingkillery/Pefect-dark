@@ -1,0 +1,5 @@
+{
+  "name": "Deathmatch Arena",
+  "description": "A futuristic first-person shooter game. You are dropped into an arena against hostile bots. Be the first to reach 20 kills to win.",
+  "requestFramePermissions": []
+}
