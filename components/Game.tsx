@@ -116,21 +116,36 @@ const Game: React.FC<GameProps> = ({ setPlayerStats, onGameOver }) => {
     document.addEventListener('keyup', handleKeyUp);
 
     // Obstacles
-    const obstacles: THREE.Mesh[] = [];
-    const boxGeometry = new THREE.BoxGeometry(10, 10, 10);
-    for (let i = 0; i < 20; i++) {
-        const boxMaterial = new THREE.MeshStandardMaterial({ color: Math.random() * 0xffffff });
-        const box = new THREE.Mesh(boxGeometry, boxMaterial);
-        box.position.set(
-            (Math.random() - 0.5) * 180,
-            5,
-            (Math.random() - 0.5) * 180
-        );
-        box.castShadow = true;
-        box.receiveShadow = true;
-        scene.add(box);
-        obstacles.push(box);
-    }
+    const obstacles: THREE.Object3D[] = [];
+    (async () => {
+        const obstacleUrls = [
+            '/models/SciFiEssentialsKit/Prop_Crate.gltf',
+            '/models/SciFiEssentialsKit/Prop_Barrel1.gltf',
+            '/models/SciFiEssentialsKit/Prop_Barrel2_Open.gltf'
+        ];
+        for (let i = 0; i < 10; i++) {
+            const url = obstacleUrls[Math.floor(Math.random() * obstacleUrls.length)];
+            try {
+                const model = await loadModel(url);
+                model.traverse(obj => {
+                    if (obj instanceof THREE.Mesh) {
+                        obj.castShadow = true;
+                        obj.receiveShadow = true;
+                    }
+                });
+                model.position.set(
+                    (Math.random() - 0.5) * 180,
+                    0,
+                    (Math.random() - 0.5) * 180
+                );
+                model.rotation.y = Math.random() * Math.PI * 2;
+                scene.add(model);
+                obstacles.push(model);
+            } catch (err) {
+                console.error('Failed to load obstacle model', url, err);
+            }
+        }
+    })();
 
     // Spawn Points
     const spawnPoints: THREE.Vector3[] = [];
