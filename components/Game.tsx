@@ -110,8 +110,10 @@ const Game: React.FC<GameProps> = ({ setPlayerStats, onGameOver }) => {
     renderer.domElement.addEventListener('click', lockHandler);
     controls.addEventListener('unlock', unlockHandler);
 
-    document.addEventListener('keydown', (e) => (keys[e.code] = true));
-    document.addEventListener('keyup', (e) => (keys[e.code] = false));
+    const handleKeyDown = (e: KeyboardEvent) => { keys[e.code] = true; };
+    document.addEventListener('keydown', handleKeyDown);
+    const handleKeyUp = (e: KeyboardEvent) => { keys[e.code] = false; };
+    document.addEventListener('keyup', handleKeyUp);
 
     // Obstacles
     const obstacles: THREE.Mesh[] = [];
@@ -288,11 +290,12 @@ const Game: React.FC<GameProps> = ({ setPlayerStats, onGameOver }) => {
       if (mountRef.current && renderer.domElement) {
         mountRef.current.removeChild(renderer.domElement);
       }
-      controls.removeEventListener('lock', lockHandler);
+      renderer.domElement.removeEventListener('click', lockHandler);
       controls.removeEventListener('unlock', unlockHandler);
       controls.dispose();
-      document.removeEventListener('keydown', (e) => (keys[e.code] = true));
-      document.removeEventListener('keyup', (e) => (keys[e.code] = false));
+      renderer.dispose();
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keyup', handleKeyUp);
     };
   }, [setPlayerStats, onGameOver]);
 
