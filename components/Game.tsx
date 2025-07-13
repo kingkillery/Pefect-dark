@@ -69,8 +69,7 @@ const Game: React.FC<GameProps> = ({ setPlayerStats, onGameOver }) => {
     scene.add(directionalLight);
 
     // Environment Map
-    // TODO: add an actual HDR environment map file and enable lighting once available.
-    // applyEnvironmentMap(renderer, scene, '/textures/env.hdr');
+    applyEnvironmentMap(renderer, scene, '/textures/env.hdr');
 
     // Ground
     const groundTexture = createGridTexture(1024, '#334', '#668', 2, 64);

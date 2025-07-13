@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader';
 
 /**
  * A shared GLTFLoader instance to avoid repeatedly allocating loaders.
@@ -39,7 +40,7 @@ export function applyEnvironmentMap(
   const pmrem = new THREE.PMREMGenerator(renderer);
   pmrem.compileEquirectangularShader();
 
-  new THREE.TextureLoader().load(hdrUrl, (texture) => {
+  new RGBELoader().load(hdrUrl, (texture) => {
     const envMap = pmrem.fromEquirectangular(texture).texture;
     texture.dispose();
     pmrem.dispose();
